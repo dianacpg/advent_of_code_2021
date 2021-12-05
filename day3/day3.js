@@ -4,26 +4,26 @@ const fs = require("fs");
 // Make array with the puzzle inputs
 const data = fs.readFileSync("./data.txt").toString().split("\n")
 
-const firstBits = data.map(code => { return code.charAt(0)})
-const secondBits = data.map(code => { return code.charAt(1)})
-const thirdBits = data.map(code => { return code.charAt(2)})
-const fourthBits = data.map(code => { return code.charAt(3)})
-const fifthBits = data.map(code => { return code.charAt(4)})
-const sixthBits = data.map(code => { return code.charAt(5)})
-const seventhBits = data.map(code => { return code.charAt(6)})
-const eightBits = data.map(code => { return code.charAt(7)})
-const ninthBits = data.map(code => { return code.charAt(8)})
-const tenthBits = data.map(code => { return code.charAt(9)})
-const eleventhBits = data.map(code => { return code.charAt(10)})
-const twelfthBits = data.map(code => { return code.charAt(11)})
+//check how many bits each binary number has
+const binaryNumberLength = data[0].length
 
-const totalBitsArray = [firstBits, secondBits, thirdBits, fourthBits, fifthBits, sixthBits, seventhBits, eightBits, ninthBits, tenthBits, eleventhBits, twelfthBits ]
+//Creates a new array with the collection of the bits numbers for each binary number position
+const binaryNumberArrays = new Array(binaryNumberLength).fill([])
 
-const zeroCounts = totalBitsArray.map(array => {
+const allBitNumbers = binaryNumberArrays.map( (array,i) => {
+   return data.map(code => { return code.charAt(i)})
+})
+
+
+//Counts how many 0 bits for each bit position by filtering the each array
+// and then checks its quantity on the bit array
+//Gamma has the most common bit for each position
+//Ellipson has the least common bit for each position
+const zeroCounting = allBitNumbers.map(array => {
    return array.filter( bit => bit == '0').length
 })
 
-const gammabits = zeroCounts.map(quantity => {
+const gammabits = zeroCounting.map(quantity => {
     return quantity > (data.length/2) ? 0 : 1
 })
 
@@ -31,10 +31,11 @@ const gamma = gammabits.join('')
 
 console.log("gamma",parseInt(gamma, 2))
 
-const ellipsonbits = zeroCounts.map(quantity => {
+const ellipsonbits = zeroCounting.map(quantity => {
     return quantity < (data.length/2) ? 0 : 1
 })
 
 const ellipson = ellipsonbits.join('')
 
+//power consumption = gamma rate * ellipson rate
 console.log("ellipson", parseInt(ellipson, 2) * parseInt(gamma, 2) )
